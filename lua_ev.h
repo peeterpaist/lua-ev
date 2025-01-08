@@ -33,14 +33,15 @@
 /**
  * Define the names used for the metatables.
  */
-#define LOOP_MT    "ev{loop}"
-#define IO_MT      "ev{io}"
-#define ASYNC_MT   "ev{async}"
-#define TIMER_MT   "ev{timer}"
-#define SIGNAL_MT  "ev{signal}"
-#define IDLE_MT    "ev{idle}"
-#define CHILD_MT   "ev{child}"
-#define STAT_MT    "ev{stat}"
+#define LOOP_MT        "ev{loop}"
+#define IO_MT          "ev{io}"
+#define ASYNC_MT       "ev{async}"
+#define TIMER_MT       "ev{timer}"
+#define SIGNAL_MT      "ev{signal}"
+#define IDLE_MT        "ev{idle}"
+#define CHILD_MT       "ev{child}"
+#define STAT_MT        "ev{stat}"
+#define PERIODIC_MT    "ev{periodic}"
 
 /**
  * Special token to represent the uninitialized default loop.  This is
@@ -95,6 +96,9 @@
 
 #define check_stat(L, narg)                                      \
     ((struct ev_stat*)     luaL_checkudata((L), (narg), STAT_MT))
+	
+#define check_periodic(L, narg)                                      \
+    ((struct ev_periodic*) luaL_checkudata((L), (narg), PERIODIC_MT))
 
 
 /**
@@ -226,3 +230,15 @@ static int               stat_stop(lua_State *L);
 static int               stat_start(lua_State *L);
 static int               stat_start(lua_State *L);
 static int               stat_getdata(lua_State *L);
+
+/**
+ * Periodic functions:
+ */
+static int               luaopen_ev_periodic(lua_State *L);
+static int               create_periodic_mt(lua_State *L);
+static int               periodic_new(lua_State* L);
+static void              periodic_cb(struct ev_loop* loop, ev_periodic* sig, int revents);
+static int               periodic_again(lua_State *L);
+static int               periodic_at(lua_State *L);
+static int               periodic_stop(lua_State *L);
+static int               periodic_start(lua_State *L);

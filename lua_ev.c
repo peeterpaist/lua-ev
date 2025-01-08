@@ -18,6 +18,7 @@
 #include "async_lua_ev.c"
 #include "child_lua_ev.c"
 #include "stat_lua_ev.c"
+#include "periodic_lua_ev.c"
 
 static const luaL_Reg R[] = {
     {"version", version},
@@ -68,6 +69,9 @@ LUALIB_API int luaopen_ev(lua_State *L) {
     luaopen_ev_stat(L);
     lua_setfield(L, -2, "Stat");
 
+    luaopen_ev_periodic(L);
+    lua_setfield(L, -2, "Periodic");
+
 #define EV_SETCONST(state, prefix, C) \
     lua_pushnumber(L, prefix ## C); \
     lua_setfield(L, -2, #C)
@@ -82,6 +86,7 @@ LUALIB_API int luaopen_ev(lua_State *L) {
     EV_SETCONST(L, EV_, STAT);
     EV_SETCONST(L, EV_, TIMEOUT);
     EV_SETCONST(L, EV_, WRITE);
+	EV_SETCONST(L, EV_, PERIODIC);
 
     EV_SETCONST(L, , SIGABRT);
     EV_SETCONST(L, , SIGALRM);
